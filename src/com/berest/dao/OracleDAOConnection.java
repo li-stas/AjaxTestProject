@@ -144,6 +144,26 @@ public class OracleDAOConnection implements DAOConnection {
         return studentList;
     }
 
+    public List<Student> selectStartsWith(String name) {
+        connect();
+        List<Student> studentList = new ArrayList<>();
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM STUDENTS WHERE Name LIKE '"
+                    + name + "%"
+                    +"' ORDER BY NAME ASC");
+            while (resultSet.next()){
+                studentList.add(parseStudent(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        disconnect();
+        System.out.println("studentList->" + studentList);
+        return studentList;
+    }
+
+
     //---------Create-------------
     @Override
     public void createStudent(String name, float scholarShip) {

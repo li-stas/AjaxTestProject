@@ -13,19 +13,18 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>Ajax Project</title>
-  </head>
-  <body>
-  <%
-
-
+</head>
+<body>
+<%
     String name = request.getParameter("val");
 
-      DAOConnection daoConnection = OracleDAOConnection.getInstance();
-      // читаем
-      List<Student> db;
-      db = daoConnection.selectAllStudents();
+    DAOConnection daoConnection = OracleDAOConnection.getInstance();
+    // читаем
+    List<Student> db;
+    /*db = daoConnection.selectAllStudents();*/
+
     /*ArrayList<Student> db = new ArrayList<Student>();
     db.add(new Student(1,"Oleg", "berestoleg@gmail.com", "SU-51"));
     db.add(new Student(2,"Kate", "kate@gmail.com", "IN-51"));
@@ -33,55 +32,55 @@
 
 
     if (name == null || name.trim().equals("")) {
-  %>
-      <p>Please enter name!</p>
-  <%
-    } else {
-      try {
-
-        boolean flag = false;
-        Student currentStudent = null;
-        for (Student student:db) {
-          /*if(student.getName().equals(name)){*/
-          if(student.getName().startsWith(name)){
-            /*currentStudent = student;*/
-            flag = true;
-          }
+%>
+<p>Please enter name!</p>
+<%
+} else {
+    try {
+        boolean flag = true;
+        db = daoConnection.selectStartsWith(name);
+        if (db.size() == 0) {
+            flag = false;
         }
+
         if (!flag) {
-  %>
-          <p>No Record Found!</p>
-  <%    }
-        else {                             %>
-            <table border='1' cellpadding='2' width='100%'>
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Group</th>
-              </tr>
-             <%
-               for (Student student:db) {
-                 if(student.getName().startsWith(name)){
-                   currentStudent = student;
-              %>
-              <tr>
-                <td><%=currentStudent.getId()%></td>
-                <td><%=currentStudent.getName()%></td>
-                <td><%=currentStudent.getEmail()%></td>
-                <td><%=currentStudent.getGroup()%></td>
-              </tr>
-              <%
-                 }
-               }
-             %>
+%>
+<p>No Record Found!</p>
+<% } else { %>
+<table border='1' cellpadding='2' width='100%'>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Group</th>
+    </tr>
+    <%
+        Student currentStudent = null;
+        for (Student student : db) {
+            if (student.getName().startsWith(name)) {
+                currentStudent = student;
+    %>
+    <tr>
+        <td><%=currentStudent.getId()%>
+        </td>
+        <td><%=currentStudent.getName()%>
+        </td>
+        <td><%=currentStudent.getEmail()%>
+        </td>
+        <td><%=currentStudent.getGroup()%>
+        </td>
+    </tr>
+    <%
+            }
+        }
+    %>
 
 
-             </table>
-  <%    }
-      } catch (Exception e) {                     %>
-          <p>Some problems ...</p>
-  <%  }
-    }                                             %>
-  </body>
+</table>
+<% }
+} catch (Exception e) { %>
+<p>Some problems ...</p>
+<% }
+} %>
+</body>
 </html>
