@@ -149,12 +149,17 @@ public class OracleDAOConnection implements DAOConnection {
         List<Student> studentList = new ArrayList<>();
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM STUDENTS WHERE Name LIKE '"
+            resultSet = statement.executeQuery(
+                    "SELECT * FROM STUDENTS WHERE Name LIKE '"
                     + name + "%"
                     +"' ORDER BY NAME ASC");
-            while (resultSet.next()){
-                studentList.add(parseStudent(resultSet));
+
+            if (resultSet.next()) {
+                do {
+                    studentList.add(parseStudent(resultSet));
+                }  while (resultSet.next());
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
