@@ -36,8 +36,8 @@ public class OracleDAOConnection implements DAOConnection {
 
     @Override
     public void connect() {
-        //connectWebLogic();
-        connectOracleDriver();
+        connectWebLogic();
+        //connectOracleDriver();
     }
 
     /*
